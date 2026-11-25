@@ -1,0 +1,689 @@
+
+/* FOOTMARKET DESIGN SYSTEM */
+
+:root {
+    --background: #080f19;
+    --surface: #111d2b;
+    --surface-light: #182638;
+    --accent: #b8f34a;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #263649;
+}
+
+/* Main background */
+
+.stApp {
+    background: radial-gradient(
+        ellipse at top right,
+        #14291f 0%,
+        #080f19 45%
+    );
+    color: var(--text);
+}
+
+.stApp header {
+    background: transparent;
+}
+
+.block-container {
+    max-width: 1400px;
+    padding-top: 2.5rem;
+    padding-bottom: 3rem;
+}
+
+/* Typography */
+
+h1, h2, h3 {
+    color: var(--text) !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.5px;
+}
+
+p {
+    color: #b8c6d8;
+}
+
+/* Navigation */
+
+.fm-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.fm-logo {
+    font-size: 29px;
+    font-weight: 900;
+    letter-spacing: -1.5px;
+    color: white;
+}
+
+.fm-logo span {
+    color: var(--accent);
+}
+
+.fm-version {
+    color: var(--accent);
+    border: 1px solid #45662b;
+    background: #172c20;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Football hero banner */
+
+.fm-hero {
+    position: relative;
+    overflow: hidden;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 80px,
+            rgba(184, 243, 74, 0.035) 80px,
+            rgba(184, 243, 74, 0.035) 160px
+        ),
+        linear-gradient(110deg, #0d2119, #19452e);
+    border: 1px solid #35583b;
+    border-radius: 20px;
+    padding: 45px;
+    margin-bottom: 28px;
+}
+
+.fm-hero::after {
+    content: "";
+    position: absolute;
+    width: 310px;
+    height: 310px;
+    border: 2px solid rgba(184, 243, 74, 0.13);
+    border-radius: 50%;
+    right: -35px;
+    top: -65px;
+    pointer-events: none;
+}
+
+.fm-eyebrow {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: var(--accent);
+    margin-bottom: 16px;
+}
+
+.fm-hero-title {
+    font-size: clamp(32px, 5vw, 60px);
+    font-weight: 900;
+    line-height: 1.08;
+    color: white;
+    letter-spacing: -2px;
+}
+
+.fm-hero-title span {
+    color: var(--accent);
+}
+
+.fm-hero-description {
+    color: #bbd0c0;
+    font-size: 16px;
+    max-width: 560px;
+    margin-top: 18px;
+}
+
+/* Statistics cards */
+
+[data-testid="stMetric"] {
+    background: linear-gradient(
+        145deg,
+        #142233,
+        #101a28
+    );
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    min-height: 125px;
+    transition: border-color 0.2s ease;
+}
+
+[data-testid="stMetric"]:hover {
+    border-color: var(--accent);
+}
+
+[data-testid="stMetricLabel"] {
+    color: var(--muted);
+}
+
+[data-testid="stMetricValue"] {
+    color: var(--accent);
+    font-weight: 800;
+}
+
+/* Prediction form */
+
+[data-testid="stForm"] {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 30px;
+}
+
+/* Input labels */
+
+.stNumberInput label,
+.stSelectbox label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #cbd5e1 !important;
+}
+
+/* Input fields */
+
+.stNumberInput input,
+.stTextInput input {
+    background-color: #080f19 !important;
+    color: white !important;
+}
+
+[data-baseweb="input"],
+[data-baseweb="select"] > div {
+    background-color: #080f19 !important;
+    border-radius: 9px !important;
+    border-color: #304056 !important;
+    color: white !important;
+}
+
+[data-baseweb="select"] svg {
+    fill: var(--accent);
+}
+
+[data-testid="stNumberInput"] button {
+    background: #182638;
+    color: var(--accent);
+}
+
+/* Buttons */
+
+.stButton > button,
+.stFormSubmitButton > button {
+    background: var(--accent) !important;
+    color: #080f19 !important;
+    font-weight: 800 !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 15px 25px !important;
+    min-height: 52px;
+    transition: all 0.2s ease;
+}
+
+.stButton > button p,
+.stFormSubmitButton > button p {
+    color: #080f19 !important;
+    font-weight: 800;
+}
+
+.stButton > button:hover,
+.stFormSubmitButton > button:hover {
+    background: #d1ff82 !important;
+    box-shadow: 0 0 20px rgba(184, 243, 74, 0.2);
+}
+
+/* Prediction result card */
+
+.fm-result {
+    background: linear-gradient(
+        135deg,
+        #10291e,
+        #143625
+    );
+    border: 1px solid #527c36;
+    border-radius: 20px;
+    padding: 40px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.fm-result-label {
+    color: #b9d0be;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+}
+
+.fm-result-value {
+    color: var(--accent);
+    font-size: clamp(34px, 6vw, 65px);
+    font-weight: 900;
+    margin: 15px 0;
+    letter-spacing: -2px;
+}
+
+.fm-result-caption {
+    color: #9bb4a3;
+    font-size: 13px;
+}
+
+/* Tabs */
+
+.stTabs [data-baseweb="tab-list"] {
+    gap: 20px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    background: transparent;
+    color: var(--muted);
+    font-weight: 700;
+    padding: 12px 18px;
+}
+
+.stTabs [aria-selected="true"] {
+    color: var(--accent) !important;
+}
+
+.stTabs [data-baseweb="tab-highlight"] {
+    background: var(--accent);
+}
+
+/* Expanders */
+
+[data-testid="stExpander"] {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+/* Footer */
+
+.fm-footer {
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    padding: 25px 0;
+    margin-top: 50px;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Mobile responsiveness */
+
+@media (max-width: 600px) {
+    .fm-hero {
+        padding: 25px;
+    }
+
+    .fm-logo {
+        font-size: 22px;
+    }
+
+    [data-testid="stForm"] {
+        padding: 18px;
+    }
+
+    [data-testid="stMetric"] {
+        padding: 15px;
+    }
+
+    .fm-result {
+        padding: 25px;
+    }
+}
+/* Main navigation */
+
+[data-testid="stRadio"] div[role="radiogroup"] {
+    background: #111d2b;
+    border: 1px solid #263649;
+    border-radius: 12px;
+    padding: 12px 20px;
+    gap: 25px;
+}
+
+[data-testid="stRadio"] label {
+    font-weight: 700;
+    padding: 8px;
+    transition: all 0.2s ease;
+}
+
+[data-testid="stRadio"] label:hover {
+    color: #b8f34a;
+}
+
+/* Data tables */
+
+[data-testid="stDataFrame"] {
+    border: 1px solid #263649;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+
+/* PLAYER COMPARISON PAGE */
+
+.fm-comparison-header {
+    background: linear-gradient(
+        120deg,
+        #10271f,
+        #132c43
+    );
+    padding: 35px;
+    border: 1px solid #304056;
+    border-radius: 18px;
+    margin-bottom: 25px;
+}
+
+/* Player profile cards */
+
+.fm-player-card {
+    background: linear-gradient(
+        145deg,
+        #182638,
+        #101a28
+    );
+    border: 1px solid #304056;
+    border-radius: 16px;
+    padding: 35px 20px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.fm-player-position {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+}
+
+.fm-player-name {
+    color: #f1f5f9;
+    font-size: clamp(22px, 3vw, 36px);
+    font-weight: 900;
+    margin: 10px 0;
+}
+
+.fm-player-club {
+    font-size: 17px;
+    color: #94a3b8;
+}
+
+.fm-player-age {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    margin-top: 15px;
+    letter-spacing: 1px;
+}
+
+/* Head-to-head statistics */
+
+.fm-comparison-row {
+    padding: 18px 24px;
+    background: #111d2b;
+    border: 1px solid #263649;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.fm-comparison-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.fm-stat-label {
+    color: #cbd5e1;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.fm-comparison-bars {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.fm-track {
+    width: 50%;
+    height: 10px;
+    background: #263649;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+}
+
+.fm-track-left {
+    justify-content: flex-end;
+}
+
+@media (max-width: 600px) {
+    .fm-player-card {
+        padding: 20px 12px;
+    }
+
+    .fm-comparison-row {
+        padding: 12px;
+    }
+
+    .fm-comparison-header {
+        padding: 20px;
+    }
+}
+
+/* =================================
+   FOOTBALL PLAYER MEDIA SYSTEM
+   ================================= */
+
+.fm-media-card {
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+/* Player photograph background */
+
+.fm-photo-stage {
+    position: relative;
+    height: 270px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    background: radial-gradient(
+        ellipse at center bottom,
+        #294535,
+        #142334 65%,
+        #111d2b
+    );
+}
+
+.fm-photo-circle {
+    position: absolute;
+    width: 230px;
+    height: 230px;
+    border: 1px solid rgba(184, 243, 74, 0.2);
+    border-radius: 50%;
+    bottom: -25px;
+}
+
+.fm-photo-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.12;
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.15) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.15) 1px,
+            transparent 1px
+        );
+    background-size: 35px 35px;
+}
+
+/* Player photographs */
+
+.fm-player-photo {
+    position: relative;
+    z-index: 2;
+    width: 220px;
+    height: 250px;
+    object-fit: contain;
+    object-position: center bottom;
+    filter: drop-shadow(
+        0 8px 20px rgba(0,0,0,0.3)
+    );
+}
+
+.fm-photo-placeholder {
+    position: relative;
+    width: 160px;
+    height: 190px;
+    z-index: 2;
+}
+
+/* Profile details */
+
+.fm-profile-details {
+    padding: 25px;
+    text-align: center;
+    border-top: 1px solid #263649;
+}
+
+/* Club badges */
+
+.fm-club-identity {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    color: #CBD5E1;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 14px 0;
+}
+
+.fm-club-badge {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* Player database hero profile */
+
+.fm-database-profile {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    border: 1px solid #304056;
+    border-left: 4px solid #B8F34A;
+    border-radius: 18px;
+    background: linear-gradient(
+        115deg,
+        #142c25,
+        #111d2b 65%
+    );
+    overflow: hidden;
+    padding: 25px 40px;
+    margin: 20px 0;
+}
+
+.fm-database-photo {
+    width: 240px;
+    height: 260px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-shrink: 0;
+    background: radial-gradient(
+        ellipse,
+        #304b39,
+        transparent 75%
+    );
+}
+
+.fm-database-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.fm-database-name {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    color: #F1F5F9;
+    margin: 15px 0;
+    letter-spacing: -1px;
+}
+
+.fm-database-details .fm-club-identity {
+    justify-content: flex-start;
+}
+
+.fm-database-details .fm-club-badge {
+    width: 42px;
+    height: 42px;
+}
+
+/* Responsive player cards */
+
+@media (max-width: 700px) {
+
+    .fm-database-profile {
+        flex-direction: column;
+        padding: 20px;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .fm-database-details .fm-club-identity {
+        justify-content: center;
+    }
+
+    .fm-photo-stage {
+        height: 220px;
+    }
+
+    .fm-player-photo {
+        width: 180px;
+        height: 205px;
+    }
+
+    .fm-profile-details {
+        padding: 15px;
+    }
+
+    .fm-club-badge {
+        width: 28px;
+        height: 28px;
+    }
+
+}
+
+/* Homepage and navigation refinements */
+.fm-brand-caption { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: 2px; margin-top: 3px; }
+.fm-navbar { margin-bottom: 8px; padding: 12px 0 18px; }
+.fm-home-hero { padding: clamp(28px, 5vw, 64px); margin-bottom: 12px; }
+.fm-hero-meta { margin-top: 28px; color: #a7c1ae; font-size: 11px; letter-spacing: 2px; font-weight: 700; }
+.st-key-fm_navigation [role="radiogroup"] { gap: 8px; padding: 8px; flex-wrap: wrap; }
+.st-key-fm_navigation label { padding: 8px 12px; border-radius: 8px; }
+.st-key-fm_navigation label:has(input:checked) { background: #263d2b; color: var(--accent); }
+.st-key-fm_navigation label:has(input:checked) p { color: var(--accent); }
+.fm-feature { min-height: 135px; padding: 6px 4px; }
+.fm-feature-number { color: var(--accent); font-size: 11px; letter-spacing: 2px; font-weight: 800; }
+.fm-feature h3 { margin: 10px 0 4px; font-size: 22px; }
+.fm-feature p { font-size: 14px; line-height: 1.6; }
+.fm-footer strong { color: var(--accent); letter-spacing: 1px; }
+@media (max-width: 700px) {
+    .fm-brand-caption { letter-spacing: 1px; font-size: 9px; }
+    .fm-version { padding: 6px 10px; font-size: 10px; }
+    .st-key-fm_navigation [role="radiogroup"] { gap: 4px; padding: 6px; }
+    .st-key-fm_navigation label { padding: 5px 7px; }
+    .fm-feature { min-height: 0; }
+}

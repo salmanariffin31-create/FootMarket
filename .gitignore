@@ -1,0 +1,48 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Credentials
+.env
+.env.*
+.streamlit/secrets.toml
+
+# Original dataset
+data/raw/
+
+# Intermediate datasets
+data/processed/footmarket_features.csv
+data/processed/footmarket_training_data.csv
+
+# Backup and duplicate files
+*.backup.py
+*.backup.css
+player_comparison_native.py
+player_comparison_corrected.py
+test_images.py
+*.zip
+
+# Temporary database files
+*.duckdb.wal
+
+# Operating system files
+.DS_Store
+Thumbs.db
+# Intermediate training outputs
+data/processed/splits/
+data/processed/polynomial_predictions.csv
+data/processed/log_regression_predictions.csv
+data/processed/linear_regression_predictions.csv
+
+# Additional local backup files
+*.backup.*
