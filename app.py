@@ -1,3 +1,4 @@
+from base64 import b64encode
 import joblib
 import duckdb
 import pandas as pd
@@ -11,6 +12,7 @@ from fm_utils import (
     predict_value,
     result_card_html,
 )
+from scouting_tools import show_leaderboard, show_hidden_gems, show_what_if
 from model_analytics import show_model_analytics
 from player_comparison import show_player_comparison
 from player_database import show_player_database
@@ -23,9 +25,12 @@ st.set_page_config(page_title="FootMarket", page_icon="⚽", layout="wide")
 
 # Load custom CSS
 def load_css():
-    css_path = ROOT / "assets" / "style.css"
-    with open(css_path, encoding="utf-8") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+    assets = ROOT / "assets"
+    base = (assets / "style.css").read_text(encoding="utf-8")
+    theme = (assets / "stadium.css").read_text(encoding="utf-8")
+    image = b64encode((assets / "stadium.webp").read_bytes()).decode("ascii")
+    theme = theme.replace("__STADIUM_IMAGE__", "data:image/webp;base64," + image)
+    st.html(f"<style>{base}\n{theme}</style>")
 
 
 load_css()
@@ -79,7 +84,7 @@ st.markdown("""
 # Website navigation
 page = st.radio(
     "Navigation",
-    ["Market Predictor", "Player Database", "Player Comparison", "Model Analytics"],
+    ["Market Predictor", "Player Database", "Player Comparison", "Leaderboard", "Hidden Gems", "What If", "Model Analytics"],
     horizontal=True,
     label_visibility="collapsed",
 )
@@ -92,6 +97,18 @@ if page == "Player Database":
 
 elif page == "Player Comparison":
     show_player_comparison(model, preprocessor, clubs)
+    st.stop()
+
+elif page == "Leaderboard":
+    show_leaderboard(model, preprocessor, clubs)
+    st.stop()
+
+elif page == "Hidden Gems":
+    show_hidden_gems(model, preprocessor, clubs)
+    st.stop()
+
+elif page == "What If":
+    show_what_if(model, preprocessor, clubs)
     st.stop()
 
 elif page == "Model Analytics":
