@@ -288,7 +288,7 @@ if submitted:
 
         # Predict log market value
         prediction_log = model.predict(
-            processed_data
+                        processed_data
         )[0]
 
         # Convert prediction back into euros
@@ -300,28 +300,25 @@ if submitted:
 
         st.subheader("Prediction Result")
 
-        st.markdown(f"""
-<div class="fm-result">
+        st.html(f"""
+    <div class="fm-result">
     <div class="fm-result-label">
         ESTIMATED MARKET VALUE
     </div>
-
     <div class="fm-result-value">
         €{prediction:,.0f}
     </div>
-
     <div class="fm-result-caption">
-        Weighted Linear Regression
+        Weighted Log Linear Regression
         | Performance-Based Valuation
     </div>
-</div>
-""", unsafe_allow_html=True)
+    </div>
+    """)
 
         st.success("Prediction generated successfully!")
 
         # Performance summary
         st.subheader("Player Performance Summary")
-
         c1, c2, c3 = st.columns(3)
 
         c1.metric(
