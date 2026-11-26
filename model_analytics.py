@@ -61,9 +61,18 @@ def show_model_analytics():
         evaluation["Dataset"] == "Validation"
     ].iloc[0]
 
+    baseline = comparison[
+        comparison["Model"] == "Original Linear Regression"
+    ].iloc[0]
+
     improvement = (
-        (comparison.iloc[0]["MAE"] - validation["MAE"])
-        / comparison.iloc[0]["MAE"]
+        (baseline["MAE"] - validation["MAE"])
+        / baseline["MAE"]
+    ) * 100
+
+    # Percentage errors (relative to the recorded value)
+    pct_error = (
+        predictions["Absolute Error"] / predictions["Actual"]
     ) * 100
 
     st.header("Model Intelligence")
@@ -95,6 +104,34 @@ def show_model_analytics():
     c4.metric(
         "Test Records",
         f"{len(predictions):,}"
+    )
+
+    d1, d2, d3, d4 = st.columns(4)
+
+    d1.metric(
+        "Median % Error",
+        f"{pct_error.median():.0f}%"
+    )
+
+    d2.metric(
+        "Within ±25%",
+        f"{(pct_error <= 25).mean() * 100:.0f}%"
+    )
+
+    d3.metric(
+        "Within ±50%",
+        f"{(pct_error <= 50).mean() * 100:.0f}%"
+    )
+
+    d4.metric(
+        "Over-€50M Players",
+        f"{int((predictions['Actual'] > 50_000_000).sum()):,}"
+    )
+
+    st.caption(
+        "R² and MAE are measured in euros, so a few very expensive "
+        "players dominate them. The percentage metrics show how far "
+        "off a typical single prediction is."
     )
 
     st.divider()
@@ -205,7 +242,7 @@ def show_model_analytics():
     st.dataframe(
         comparison[["Model", "MAE", "RMSE", "R2"]],
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
         column_config={
             "MAE": st.column_config.NumberColumn(
                 format="€%.2f"
@@ -309,7 +346,46 @@ def show_model_analytics():
     st.dataframe(
         position_summary.round(2),
         hide_index=True,
-        use_container_width=True
+        width="stretch"
+    )
+
+    st.divider()
+
+    # Accuracy by recorded value tier
+    st.subheader("Accuracy by Recorded Value")
+
+    tiers = pd.cut(
+        predictions["Actual"],
+        [0, 1e6, 5e6, 20e6, 50e6, float("inf")],
+        labels=["Under €1M", "€1M–5M", "€5M–20M", "€20M–50M", "Over €50M"]
+    )
+
+    tier_summary = pd.DataFrame({
+        "Tier": tiers,
+        "Actual (€M)": predictions["Actual"] / 1e6,
+        "Predicted (€M)": predictions["Predicted"] / 1e6,
+        "Median % Error": pct_error
+    }).groupby("Tier", observed=True).agg(
+        Records=("Actual (€M)", "count"),
+        Avg_Actual=("Actual (€M)", "mean"),
+        Avg_Predicted=("Predicted (€M)", "mean"),
+        Median_Pct_Error=("Median % Error", "median")
+    ).reset_index()
+
+    tier_summary["Avg_Predicted_vs_Actual"] = (
+        tier_summary["Avg_Predicted"] / tier_summary["Avg_Actual"] * 100
+    )
+
+    st.dataframe(
+        tier_summary.round(1),
+        hide_index=True,
+        width="stretch"
+    )
+
+    st.caption(
+        "The model tends to under-predict the most valuable "
+        "players. The prediction ranges shown in the app are "
+        "built per predicted-value tier for this reason."
     )
 
     st.divider()
@@ -321,7 +397,7 @@ def show_model_analytics():
     st.dataframe(
         evaluation.round(4),
         hide_index=True,
-        use_container_width=True
+        width="stretch"
     )
 
     # Model limitations

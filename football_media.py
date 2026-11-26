@@ -2,6 +2,7 @@
 import streamlit as st
 import duckdb
 
+import logging
 from pathlib import Path
 from html import escape
 from urllib.parse import urlparse
@@ -11,6 +12,13 @@ from io import BytesIO
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent
+
+logger = logging.getLogger("footmarket.media")
+
+
+def _debug(*args):
+    """Debug output goes to the logger (silent unless DEBUG is enabled)."""
+    logger.debug(" ".join(str(a) for a in args))
 
 
 # Normalise player and club IDs
@@ -42,7 +50,7 @@ def load_player_images():
 
         if "image_url" not in columns:
 
-            print("[Media] players.image_url is missing")
+            _debug("[Media] players.image_url is missing")
 
             return {}
 
@@ -60,7 +68,7 @@ def load_player_images():
         )
     }
 
-    print("[Media] Image URLs loaded:", len(images))
+    _debug("[Media] Image URLs loaded:", len(images))
 
     return images
 
@@ -112,7 +120,7 @@ def fetch_image(url):
 
     if not isinstance(url, str) or not url.strip():
 
-        print("[Media] No image URL")
+        _debug("[Media] No image URL")
 
         return None
 
@@ -120,7 +128,7 @@ def fetch_image(url):
 
     if not allowed_url(url):
 
-        print("[Media] Unsupported image URL:", url)
+        _debug("[Media] Unsupported image URL:", url)
 
         return None
 
@@ -135,9 +143,9 @@ def fetch_image(url):
 
         with urlopen(request, timeout=15) as response:
 
-            print("[Media] HTTP status:", response.status)
+            _debug("[Media] HTTP status:", response.status)
 
-            print(
+            _debug(
                 "[Media] Content type:",
                 response.headers.get_content_type()
             )
@@ -158,7 +166,7 @@ def fetch_image(url):
 
                 raise ValueError("Image dimensions too large")
 
-            print("[Media] Original image size:", image.size)
+            _debug("[Media] Original image size:", image.size)
 
             image.thumbnail((500, 500))
 
@@ -166,15 +174,15 @@ def fetch_image(url):
                 image.convert("RGBA")
             )
 
-        print("[Media] Download successful:", url)
+        _debug("[Media] Download successful:", url)
 
         return result
 
     except Exception as error:
 
-        print("[Media] Download failed:", url)
+        _debug("[Media] Download failed:", url)
 
-        print("[Media] Error:", repr(error))
+        _debug("[Media] Error:", repr(error))
 
         return None
 
@@ -188,26 +196,26 @@ def get_player_photo(player_id):
 
     url = images.get(player_id)
 
-    print("\n[Photo] Player ID:", player_id)
+    _debug("\n[Photo] Player ID:", player_id)
 
-    print("[Photo] Image URL:", url)
+    _debug("[Photo] Image URL:", url)
 
     if not isinstance(url, str) or not url.strip():
 
-        print("[Photo] URL not found")
+        _debug("[Photo] URL not found")
 
         return None
 
     url = url.strip()
 
-    print(
+    _debug(
         "[Photo] URL allowed:",
         allowed_url(url)
     )
 
     photo = fetch_image(url)
 
-    print(
+    _debug(
         "[Photo] Retrieved:",
         photo is not None
     )
@@ -222,7 +230,7 @@ def get_club_badge(club_id):
 
     if not club_id.isdigit():
 
-        print("[Media] Invalid club ID:", club_id)
+        _debug("[Media] Invalid club ID:", club_id)
 
         return None
 

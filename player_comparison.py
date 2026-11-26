@@ -1,4 +1,5 @@
 
+import logging
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -12,25 +13,23 @@ from html import escape
 from base64 import b64decode
 from io import BytesIO
 from PIL import Image, ImageDraw
-from player_database import load_player_data
+from fm_utils import (
+    euros,
+    load_player_data,
+    load_player_list,
+    predict_value as _predict_value,
+    prediction_range,
+)
 
 
 # Predict market value using V4 model
 def predict_value(player, model, preprocessor):
 
-    data = pd.DataFrame([player.to_dict()])
-
-    data["age_squared"] = data["age"] ** 2
-
-    features = preprocessor.feature_names_in_
-
-    processed = preprocessor.transform(
-        data[features]
+    return _predict_value(
+        model,
+        preprocessor,
+        pd.DataFrame([player.to_dict()])
     )
-
-    prediction_log = model.predict(processed)[0]
-
-    return max(np.expm1(prediction_log), 0)
 
 
 # Select player and historical record
@@ -97,7 +96,9 @@ def display_profile(player, club_mapping, color):
         image.load()
         available = True
     except Exception as error:
-        print(f"[Photo] {player['name']}: {error}", flush=True)
+        logging.getLogger("footmarket.media").debug(
+            "Photo unavailable for %s: %s", player["name"], error
+        )
         image = Image.new("RGB", (220, 250), "#142334")
         draw = ImageDraw.Draw(image)
         draw.ellipse((70, 24, 150, 104), fill="#526579")
@@ -466,19 +467,8 @@ def show_player_comparison(model, preprocessor, clubs):
 </div>
 """)
 
-    # Create searchable player list
-    players = df[
-        ["player_id", "name"]
-    ].drop_duplicates(
-        subset=["player_id"]
-    ).sort_values("name").copy()
-
-    players["label"] = (
-        players["name"].astype(str)
-        + " ("
-        + players["player_id"].astype(str)
-        + ")"
-    )
+    # Searchable player list (cached; best-known players first)
+    players = load_player_list()
 
     # Select two players
     left, right = st.columns(2)
@@ -587,17 +577,22 @@ def show_player_comparison(model, preprocessor, clubs):
 
         st.metric(
             "Model-Estimated Value",
-            f"€{prediction_a:,.0f}"
+            euros(prediction_a)
+        )
+
+        low_a, high_a = prediction_range(prediction_a)
+        st.caption(
+            f"Typical range: {euros(low_a)} – {euros(high_a)}"
         )
 
         st.metric(
             "Recorded Dataset Value",
-            f"€{actual_a:,.0f}"
+            euros(actual_a)
         )
 
         st.metric(
             "Absolute Prediction Error",
-            f"€{error_a:,.0f}"
+            euros(error_a)
         )
 
         st.caption(
@@ -621,17 +616,22 @@ def show_player_comparison(model, preprocessor, clubs):
 
         st.metric(
             "Model-Estimated Value",
-            f"€{prediction_b:,.0f}"
+            euros(prediction_b)
+        )
+
+        low_b, high_b = prediction_range(prediction_b)
+        st.caption(
+            f"Typical range: {euros(low_b)} – {euros(high_b)}"
         )
 
         st.metric(
             "Recorded Dataset Value",
-            f"€{actual_b:,.0f}"
+            euros(actual_b)
         )
 
         st.metric(
             "Absolute Prediction Error",
-            f"€{error_b:,.0f}"
+            euros(error_b)
         )
 
         st.caption(
@@ -672,17 +672,23 @@ def show_player_comparison(model, preprocessor, clubs):
             percentage_difference = difference / lower_value * 100
             st.success(
                 f"{higher_player} has a higher model-estimated value "
-                f"by €{difference:,.0f} ({percentage_difference:.1f}% "
+                f"by {euros(difference)} ({percentage_difference:.1f}% "
                 f"higher than {lower_player})."
             )
         else:
             st.success(
                 f"{higher_player} has a higher model-estimated value "
-                f"by €{difference:,.0f}."
+                f"by {euros(difference)}."
             )
     else:
         st.info(
             "Both players have equal model-estimated market values."
+        )
+
+    if max(low_a, low_b) <= min(high_a, high_b):
+        st.info(
+            "The two typical ranges overlap, so the model cannot "
+            "confidently say which player is worth more."
         )
 
     st.caption(

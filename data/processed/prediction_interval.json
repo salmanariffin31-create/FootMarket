@@ -1,0 +1,29 @@
+{
+  "method": "empirical 10th/90th percentile of actual/predicted ratio on validation set (2023-2024)",
+  "bins": [
+    {
+      "label": "under 1M",
+      "upper": 1000000.0,
+      "low_ratio": 0.5025,
+      "high_ratio": 2.7264
+    },
+    {
+      "label": "1M-5M",
+      "upper": 5000000.0,
+      "low_ratio": 0.4625,
+      "high_ratio": 2.8315
+    },
+    {
+      "label": "5M-20M",
+      "upper": 20000000.0,
+      "low_ratio": 0.5994,
+      "high_ratio": 2.8481
+    },
+    {
+      "label": "over 20M",
+      "upper": null,
+      "low_ratio": 0.7058,
+      "high_ratio": 2.2186
+    }
+  ]
+}

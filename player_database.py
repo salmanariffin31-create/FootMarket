@@ -9,20 +9,16 @@ from football_media import (
     player_photo_html,
     club_badge_html
 )
+from fm_utils import (
+    euros,
+    load_player_data,
+    load_player_list,
+    predict_value,
+    prediction_range,
+    result_card_html,
+)
 
 ROOT = Path(__file__).resolve().parent
-
-
-@st.cache_data
-def load_player_data():
-
-    df = pd.read_csv(
-        ROOT / "data/processed/footmarket_final.csv",
-        dtype={"last_club_id": str},
-        parse_dates=["valuation_date"]
-    )
-
-    return df
 
 
 def show_player_database(model, preprocessor, clubs):
@@ -56,18 +52,12 @@ def show_player_database(model, preprocessor, clubs):
 
     st.divider()
 
-    # Create searchable player list
-    players = df[
-        ["player_id", "name"]
-    ].drop_duplicates(
-        subset=["player_id"]
-    ).sort_values("name")
+    # Searchable player list (cached; best-known players listed first)
+    players = load_player_list()
 
-    player_options = {
-        f"{row['name']} ({row['player_id']})":
-        row["player_id"]
-        for _, row in players.iterrows()
-    }
+    player_options = dict(
+        zip(players["label"], players["player_id"])
+    )
 
     selected_player = st.selectbox(
         "Search Football Player",
@@ -217,53 +207,61 @@ def show_player_database(model, preprocessor, clubs):
     # Historical prediction
     if st.button(
         "Predict Player Market Value",
-        use_container_width=True
+        width="stretch"
     ):
 
-        processed = preprocessor.transform(
-            player_input[features]
-        )
-
-        prediction_log = model.predict(processed)[0]
-
-        prediction = max(
-            np.expm1(prediction_log), 0
+        prediction = predict_value(
+            model,
+            preprocessor,
+            player_input
         )
 
         actual = player["market_value"]
 
         error = abs(actual - prediction)
 
-        st.markdown(f"""
-        <div class="fm-result">
-            <div class="fm-result-label">
-                ESTIMATED MARKET VALUE
-            </div>
-            <div class="fm-result-value">
-                €{prediction:,.0f}
-            </div>
-            <div class="fm-result-caption">
-                Historical Player Valuation
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        low, high = prediction_range(prediction)
+
+        st.html(
+            result_card_html(
+                prediction,
+                "Historical Player Valuation"
+            )
+        )
 
         c1, c2, c3 = st.columns(3)
 
         c1.metric(
             "Actual Recorded Value",
-            f"€{actual:,.0f}"
+            euros(actual)
         )
 
         c2.metric(
             "Predicted Value",
-            f"€{prediction:,.0f}"
+            euros(prediction)
         )
 
         c3.metric(
             "Absolute Error",
-            f"€{error:,.0f}"
+            euros(error)
         )
+
+        if low <= actual <= high:
+            st.success(
+                f"The recorded value ({euros(actual)}) is inside "
+                f"the typical range ({euros(low)} – {euros(high)})."
+            )
+        elif actual > high:
+            st.warning(
+                f"The recorded value ({euros(actual)}) is above "
+                f"the typical range ({euros(low)} – {euros(high)}). "
+                "The model tends to underestimate high-value players."
+            )
+        else:
+            st.warning(
+                f"The recorded value ({euros(actual)}) is below "
+                f"the typical range ({euros(low)} – {euros(high)})."
+            )
 
         if pd.Timestamp(selected_date) < pd.Timestamp("2023-01-01"):
             st.warning(
@@ -312,7 +310,7 @@ def show_player_database(model, preprocessor, clubs):
                 "market_value"
             ]],
             hide_index=True,
-            use_container_width=True
+            width="stretch"
         )
 
     st.caption(
