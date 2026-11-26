@@ -1,0 +1,253 @@
+/* FootMarket stadium edition — loaded after existing CSS */
+:root { --accent:#b8f34a; --surface:#101c28; --border:#344b50; }
+.stApp {
+ background: linear-gradient(180deg,rgba(4,10,16,.76),rgba(5,12,19,.94)), url("__STADIUM_IMAGE__") center center / cover no-repeat fixed !important;
+}
+.stApp header {background:rgba(5,12,19,.78)!important;}
+.block-container {max-width:1440px; padding-top:2rem;}
+.fm-navbar {padding:20px 24px; border:1px solid rgba(184,243,74,.18); border-radius:14px; background:rgba(7,16,24,.88); box-shadow:0 12px 40px #0005;}
+.fm-logo {font-size:32px; letter-spacing:-1.8px; font-weight:900;}
+.fm-hero, .fm-comparison-header {
+ background:linear-gradient(90deg,rgba(3,12,17,.94) 0%,rgba(3,12,17,.67) 42%,rgba(3,12,17,.04) 100%),url("__STADIUM_IMAGE__") center 63% / cover no-repeat !important;
+ border:1px solid #52734c; border-radius:20px; box-shadow:0 22px 60px #0007; overflow:hidden; position:relative;
+}
+.fm-hero {min-height:390px; padding:65px 48px!important; display:flex; flex-direction:column; justify-content:center;}
+.fm-comparison-header {min-height:230px; padding:38px!important;}
+.fm-hero::after,.fm-hero::before,.fm-comparison-header::after,.fm-comparison-header::before {content:none!important;}
+.fm-hero-title {font-size:clamp(34px,5.4vw,76px); font-weight:900; line-height:.99; letter-spacing:-.045em; text-shadow:0 4px 24px #0009;}
+.fm-comparison-header .fm-hero-title {font-size:clamp(32px,4.3vw,58px);}
+.fm-eyebrow {letter-spacing:.24em; color:#c8fa73;}
+.fm-hero-description {color:#e1e9e5; max-width:520px; line-height:1.6; text-shadow:0 2px 10px #000;}
+[data-testid="stMetric"], [data-testid="stForm"], [data-testid="stExpander"], .fm-player-card, .fm-comparison-row, .fm-database-profile {
+ background:linear-gradient(145deg,rgba(20,35,46,.96),rgba(8,19,29,.96))!important;
+ border-color:rgba(125,166,146,.27)!important; box-shadow:0 8px 24px #0003;
+}
+[data-testid="stMetric"] {padding:18px!important; min-height:100px;}
+[data-testid="stMetricValue"] {font-variant-numeric:tabular-nums;}
+[data-testid="stRadio"] div[role="radiogroup"] {background:rgba(9,21,30,.9)!important; border-color:#334a46!important; padding:10px 16px; gap:12px; flex-wrap:wrap;}
+[data-testid="stRadio"] label:has(input:checked) {background:#263b29; border-radius:8px; color:#c8fa73!important;}
+.fm-result {background:linear-gradient(110deg,rgba(8,32,21,.95),rgba(21,62,34,.9))!important; border-color:#719b45; box-shadow:0 16px 48px #0005;}
+.fm-player-card {border-radius:15px;}
+.fm-player-card .fm-profile-details {padding:18px!important;}
+.fm-player-name {font-size:clamp(20px,2.5vw,32px);}
+.fm-comparison-row {padding:13px 18px;}
+.fm-footer {background:rgba(5,12,19,.78); border-radius:12px; padding:25px 15px;}
+@media(max-width:700px){.fm-hero{min-height:290px;padding:30px 22px!important;background-position:65% center!important;}.fm-comparison-header{padding:24px!important;min-height:180px;}.fm-navbar{padding:14px;}.fm-logo{font-size:25px;}.fm-hero-title{font-size:clamp(30px,8vw,46px);}}
+
+/* =========================================
+   FOOTMARKET — ANIMATION SYSTEM
+   ========================================= */
+
+/* Smooth entrance */
+
+@keyframes fmFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Stadium lighting */
+
+@keyframes fmStadiumLight {
+    0%, 100% {
+        opacity: 0.15;
+        transform: translateX(-20px);
+    }
+    50% {
+        opacity: 0.45;
+        transform: translateX(20px);
+    }
+}
+
+/* Prediction glow */
+
+@keyframes fmPredictionGlow {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(184, 243, 74, 0.08);
+    }
+    50% {
+        box-shadow: 0 0 35px rgba(184, 243, 74, 0.22);
+    }
+}
+
+/* Comparison bar entrance */
+
+@keyframes fmBarGrow {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
+/* Hero banner animation */
+
+.fm-hero,
+.fm-comparison-header {
+    animation: fmFadeUp 0.7s ease-out both;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.fm-hero::before,
+.fm-comparison-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse at top right,
+        rgba(205, 255, 170, 0.25),
+        transparent 60%
+    );
+    animation: fmStadiumLight 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Headline animation */
+
+.fm-hero-title {
+    animation: fmFadeUp 0.8s ease-out both;
+}
+
+.fm-hero-description {
+    animation: fmFadeUp 0.9s ease-out both;
+}
+
+/* Player profile cards */
+
+.fm-player-card,
+.fm-database-profile {
+    animation: fmFadeUp 0.6s ease-out both;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.fm-player-card:hover,
+.fm-database-profile:hover {
+    transform: translateY(-4px);
+    border-color: #B8F34A;
+    box-shadow: 0 10px 30px rgba(184, 243, 74, 0.08);
+}
+
+/* Native Streamlit images */
+
+[data-testid="stImage"] {
+    animation: fmFadeUp 0.65s ease-out both;
+}
+
+[data-testid="stImage"] img {
+    transition: filter 0.3s ease;
+}
+
+[data-testid="stImage"] img:hover {
+    filter: brightness(1.08);
+}
+
+/* Metric cards */
+
+[data-testid="stMetric"] {
+    animation: fmFadeUp 0.5s ease-out both;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+[data-testid="stMetric"]:hover {
+    transform: translateY(-3px);
+    border-color: rgba(184, 243, 74, 0.6);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* Prediction result */
+
+.fm-result {
+    animation:
+        fmFadeUp 0.6s ease-out both,
+        fmPredictionGlow 4s ease-in-out infinite;
+}
+
+.fm-result-value {
+    animation: fmFadeUp 0.8s ease-out both;
+}
+
+/* Animated comparison bars */
+
+.fm-track > div {
+    transform-origin: left center;
+    animation: fmBarGrow 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.fm-track-left > div {
+    transform-origin: right center;
+}
+
+/* Buttons */
+
+.stButton > button,
+.stFormSubmitButton > button,
+.stDownloadButton > button {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease !important;
+}
+
+.stButton > button:hover,
+.stFormSubmitButton > button:hover,
+.stDownloadButton > button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(184, 243, 74, 0.2);
+}
+
+.stButton > button:active,
+.stFormSubmitButton > button:active {
+    transform: scale(0.98);
+}
+
+/* Navigation transitions */
+
+[data-testid="stRadio"] label {
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+/* Accessibility: reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+    .fm-hero,
+    .fm-hero::before,
+    .fm-comparison-header,
+    .fm-comparison-header::before,
+    .fm-hero-title,
+    .fm-hero-description,
+    .fm-player-card,
+    .fm-database-profile,
+    .fm-result,
+    .fm-result-value,
+    .fm-track > div,
+    [data-testid="stMetric"],
+    [data-testid="stImage"] {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .stButton > button,
+    .stFormSubmitButton > button,
+    .stDownloadButton > button,
+    [data-testid="stRadio"] label {
+        transition: none !important;
+    }
+}

@@ -107,7 +107,7 @@ def display_profile(player, club_mapping, color):
 
     _, portrait, _ = st.columns([1, 2, 1])
     with portrait:
-        st.image(image, width=220)
+        st.image(image, width=150)
         if not available:
             st.caption("Player photograph unavailable")
 
@@ -265,7 +265,7 @@ def show_radar(player_a, player_b, df):
 
     # Create radar chart
     fig, ax = plt.subplots(
-        figsize=(7, 6),
+        figsize=(6, 5.3),
         subplot_kw={"polar": True}
     )
 
@@ -340,7 +340,7 @@ def show_radar(player_a, player_b, df):
 
     fig.tight_layout()
 
-    st.pyplot(fig)
+    st.pyplot(fig, width=560)
 
     plt.close(fig)
 
@@ -371,7 +371,7 @@ def show_market_history(df, player_a, player_b):
         "valuation_date"
     )
 
-    fig, ax = plt.subplots(figsize=(10, 5))
+    fig, ax = plt.subplots(figsize=(9, 4.2))
 
     fig.patch.set_facecolor("#111D2B")
     ax.set_facecolor("#111D2B")
@@ -420,7 +420,7 @@ def show_market_history(df, player_a, player_b):
     fig.autofmt_xdate()
     fig.tight_layout()
 
-    st.pyplot(fig)
+    st.pyplot(fig, width=820)
     plt.close(fig)
 
     st.caption(
